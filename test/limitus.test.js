@@ -5,10 +5,17 @@ function noop () {}
 
 describe('limitus', function () {
     var Limitus = require('../');
-    var limitus;
+    var limitus, clock;
 
     beforeEach(function () {
-        limitus = new Limitus();
+        clock = sinon.useFakeTimers();
+    });
+    afterEach(function () {
+        clock.restore();
+    });
+
+    beforeEach(function () {
+        limitus = new Limitus({ cleanInterval: 10 });
     });
 
     it('extends', function () {
@@ -27,14 +34,6 @@ describe('limitus', function () {
     });
 
     describe('default object store', function () {
-        var clock;
-
-        before(function () {
-            clock = sinon.useFakeTimers();
-        });
-        after(function () {
-            clock.restore();
-        });
 
         it('gets and sets a value', function (done) {
             limitus.set('foo', 'bar', 10, function (err) {
@@ -104,10 +103,34 @@ describe('limitus', function () {
             }).catch(done);
         });
 
+        it('calls back when everything ok', function (done) {
+            mode.returns({ limited: false, next: 'asdf', expiration: 300 });
+
+            limitus.dropLogin({}, function (err) {
+                expect(err).to.be.undefined;
+                expect(limitus.get.calledWith(emptyKey)).to.be.true;
+                expect(mode.calledWith({ max: 5, interval: 100 }, undefined)).to.be.true;
+                expect(limitus.set.calledWith(emptyKey, 'asdf', 300)).to.be.true;
+                done();
+            });
+        });
+
         it('rejects when limited and not overflowed', function (done) {
             mode.returns({ limited: true, next: 'asdf', expiration: 300 });
 
             limitus.dropLogin({}).catch(function (err) {
+                expect(err).to.be.an.instanceof(Limitus.Rejected);
+                expect(limitus.get.calledWith(emptyKey)).to.be.true;
+                expect(mode.calledWith({ max: 5, interval: 100 }, undefined)).to.be.true;
+                expect(limitus.set.called).to.be.false;
+                done();
+            });
+        });
+
+        it('calls back when limited and not overflowed', function (done) {
+            mode.returns({ limited: true, next: 'asdf', expiration: 300 });
+
+            limitus.dropLogin({}, function (err) {
                 expect(err).to.be.an.instanceof(Limitus.Rejected);
                 expect(limitus.get.calledWith(emptyKey)).to.be.true;
                 expect(mode.calledWith({ max: 5, interval: 100 }, undefined)).to.be.true;

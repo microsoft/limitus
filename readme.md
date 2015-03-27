@@ -43,11 +43,12 @@ Creates a new "rule". The name should be a string, the rule should be an object 
 limiter.rule('login', { max: 5, interval: 1000 * 60 * 5 });
 ```
 
-#### limitus.drop(bucket, identifier[, rule]) -> Promise
+#### limitus.drop(bucket, identifier[, rule][, calback]) -> Promise
 
-Add a "drop" in the specified bucket. The `bucket` should be a string, such as "login". The `identifier` should be an object for which you want to identify the client. It returns a Promise which is resolved if the limit has not been hit, or is rejected with Limitus. Rejected if the rate limit has been exceeded.
+Add a "drop" in the specified bucket. The `bucket` should be a string, such as "login". The `identifier` should be an object for which you want to identify the client. If you previously created a rule matching the name, you don't need to pass the `rule` argument. Otherwise, it is required. Also, if you did create a rule before, it is aliased as `drop[Rule]`.
 
-If you previously created a rule matching the name, you don't need to pass the `rule` argument. Otherwise, it is required. Also, if you did create a rule before, it is ailiased as `dropRule`.
+If you pass a callback, it gets called potentially with an `err`. If no callback is passed, it returns a Promise which is resolved if the limit has not been hit, or is rejected with Limitus.Rejected if the rate limit has been exceeded.
+.
 
 ```js
 limiter.dropLogin({ ip: req.ip })
@@ -58,6 +59,8 @@ limiter.dropLogin({ ip: req.ip })
         req.status(400).json('Too many requests!')
     });
 
+// Or:
+limiter.dropLogin({ ip: req.ip }, function (err) { ... });
 // If you did not specify a rule:
 limiter.drop('login', { ip: req.ip }, { max: 5, interval: 1000 * 60 * 5 }); // -> Promise
 // If you already did, it's aliased:
@@ -86,3 +89,17 @@ limiter.extend({
 ### Class: Limitus.Rejected
 
 This is the error thrown when a rate limit is exceeded
+
+## Performance
+
+Running on io.js in callback mode, Limitus runs an overhead of 2.2 μs (0.0022 milliseconds). Promise mode and older Node versions may be slightly slower, so use what you think is best:
+
+```bash
+$ node bench.js
+callbacks x 448,552 ops/sec ±1.91% (93 runs sampled) (2.2 μs/op)
+promises x 365,435 ops/sec ±1.84% (93 runs sampled) (2.7 μs/op)
+```
+
+## License
+
+Limitus is copyright 2015 by Beam LLC and distributed under the MIT license.
