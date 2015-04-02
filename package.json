@@ -1,6 +1,6 @@
 {
   "name": "limitus",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Limitus makes rate limiting your anything a snap.",
   "main": "index.js",
   "scripts": {
