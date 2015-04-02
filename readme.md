@@ -1,6 +1,6 @@
 # Limitus
 
-[![Build Status](https://travis-ci.org/MCProHosting/limitus.svg)](https://travis-ci.org/MCProHosting/limitus) [![Coverage Status](https://coveralls.io/repos/MCProHosting/limitus/badge.svg)](https://coveralls.io/r/MCProHosting/limitus)
+[![Build Status](https://travis-ci.org/MCProHosting/limitus.svg)](https://travis-ci.org/MCProHosting/limitus) [![Coverage Status](https://coveralls.io/repos/MCProHosting/limitus/badge.svg?branch=master)](https://coveralls.io/r/MCProHosting/limitus?branch=master)
 
 Limitus is a (very) fast solution to rate limiting your application. It is agnostic as far as persistence goes - all you need to run it is a key value store (see examples for implementations using a plain hashmap and Redis).
 
