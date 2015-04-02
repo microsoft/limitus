@@ -28,16 +28,23 @@ app.post('/login', function (req, res) {
 
 ## Usage
 
-### Class: Limitus(options)
+### Class: Limitus()
 
 The Limitus class is exported by this module. Options can take the following values:
 
- * `mode` - Mode may be either one of "interval" or "continuous". Interval mode pools requests in a time interval, and at the end of the interval the bucket is reset. Defaults to `continuous`.
- * `overflow` - In continuous mode, record requests even after the rate limit was passed - punishing clients who continue to request even after being notified of their rate limit exceeding. Defaults to `false`.
+ * `overflow` - Record the next limit value even after the rate limit was passed - "punishing" clients who continue to request even after being notified of their rate limit exceeding. This is only useful in "continuous" mode. Defaults to `false`.
+
 
 #### limitus.rule(name, rule)
 
-Creates a new "rule". The name should be a string, the rule should be an object with the `max` number of requests in an `interval`.
+Creates a new "rule". The name should be a string, the rule should be an object with the `max` number of requests in an `interval`. You can also pass the `mode`, which can be one of the following:
+
+ * `interval` Heaps requests into a stack. If the stack is over the max, requests are denied. At the end of the interval, the stack is reset back to zero.
+ * `continuous` Keeps a running "count". Making a request adds one to the count, and the count is decreased at a rate of (interval / max).
+ * Any function that accepts a `rule` (an object with a max and interval) and returns an object with the keys:
+   * `limited` - boolean, whether this request should be denied.
+   * `next` - a string for the next saved value to take.
+   * `expiration` - time until it's safe to remove the "next" record from storage.
 
 ```
 limiter.rule('login', { max: 5, interval: 1000 * 60 * 5 });

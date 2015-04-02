@@ -76,12 +76,25 @@ describe('limitus', function () {
         });
     });
 
+    describe('mode selection', function () {
+        it('uses given mode', function () {
+            var mode = function () {};
+            expect(limitus.resolveMode(mode)).to.equal(mode);
+        });
+        it('defaults to continuous', function () {
+            expect(limitus.resolveMode(undefined)).to.equal(require('../lib/modes/continuous'));
+        });
+        it('overrides and requires', function () {
+            expect(limitus.resolveMode('interval')).to.equal(require('../lib/modes/interval'));
+        });
+    });
+
     describe('drop', function () {
         var mode, emptyKey = 'u5861539';
 
         beforeEach(function () {
-            limitus.rule('login', { max: 5, interval: 100 });
-            mode = limitus._mode = sinon.stub();
+            mode = sinon.stub();
+            limitus.rule('login', { max: 5, interval: 100, mode: mode });
             sinon.spy(limitus, 'set');
             sinon.spy(limitus, 'get');
         });
@@ -97,7 +110,7 @@ describe('limitus', function () {
 
             limitus.dropLogin({}).then(function () {
                 expect(limitus.get.calledWith(emptyKey)).to.be.true;
-                expect(mode.calledWith({ max: 5, interval: 100 }, undefined)).to.be.true;
+                expect(mode.calledWith({ max: 5, interval: 100, mode: mode }, undefined)).to.be.true;
                 expect(limitus.set.calledWith(emptyKey, 'asdf', 300)).to.be.true;
                 done();
             }).catch(done);
@@ -109,7 +122,7 @@ describe('limitus', function () {
             limitus.dropLogin({}, function (err) {
                 expect(err).to.be.undefined;
                 expect(limitus.get.calledWith(emptyKey)).to.be.true;
-                expect(mode.calledWith({ max: 5, interval: 100 }, undefined)).to.be.true;
+                expect(mode.calledWith({ max: 5, interval: 100, mode: mode }, undefined)).to.be.true;
                 expect(limitus.set.calledWith(emptyKey, 'asdf', 300)).to.be.true;
                 done();
             });
@@ -121,7 +134,7 @@ describe('limitus', function () {
             limitus.dropLogin({}).catch(function (err) {
                 expect(err).to.be.an.instanceof(Limitus.Rejected);
                 expect(limitus.get.calledWith(emptyKey)).to.be.true;
-                expect(mode.calledWith({ max: 5, interval: 100 }, undefined)).to.be.true;
+                expect(mode.calledWith({ max: 5, interval: 100, mode: mode }, undefined)).to.be.true;
                 expect(limitus.set.called).to.be.false;
                 done();
             });
@@ -133,7 +146,7 @@ describe('limitus', function () {
             limitus.dropLogin({}, function (err) {
                 expect(err).to.be.an.instanceof(Limitus.Rejected);
                 expect(limitus.get.calledWith(emptyKey)).to.be.true;
-                expect(mode.calledWith({ max: 5, interval: 100 }, undefined)).to.be.true;
+                expect(mode.calledWith({ max: 5, interval: 100, mode: mode }, undefined)).to.be.true;
                 expect(limitus.set.called).to.be.false;
                 done();
             });
@@ -146,7 +159,7 @@ describe('limitus', function () {
             limitus.dropLogin({}).catch(function (err) {
                 expect(err).to.be.an.instanceof(Limitus.Rejected);
                 expect(limitus.get.calledWith(emptyKey)).to.be.true;
-                expect(mode.calledWith({ max: 5, interval: 100 }, undefined)).to.be.true;
+                expect(mode.calledWith({ max: 5, interval: 100, mode: mode }, undefined)).to.be.true;
                 expect(limitus.set.calledWith(emptyKey, 'asdf', 300)).to.be.true;
                 done();
             });

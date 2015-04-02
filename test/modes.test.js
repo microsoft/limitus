@@ -44,12 +44,12 @@ describe('modes', function () {
         });
     });
 
-    describe('bucket', function () {
-        var bucket = require('../lib/modes/bucket');
+    describe('interval', function () {
+        var interval = require('../lib/modes/interval');
         var rule = { max: 5, interval: 100 };
 
         it('works from undefined', function () {
-            expect(bucket(rule, undefined)).to.deep.equal({
+            expect(interval(rule, undefined)).to.deep.equal({
                 limited: false,
                 next: '1:100',
                 expiration: 100
@@ -57,7 +57,7 @@ describe('modes', function () {
         });
 
         it('adds from previous', function () {
-            expect(bucket(rule, '2:100')).to.deep.equal({
+            expect(interval(rule, '2:100')).to.deep.equal({
                 limited: false,
                 next: '3:100',
                 expiration: 100
@@ -67,7 +67,7 @@ describe('modes', function () {
         it('resets after interval', function () {
             clock.tick(101);
 
-            expect(bucket(rule, '2:100')).to.deep.equal({
+            expect(interval(rule, '2:100')).to.deep.equal({
                 limited: false,
                 next: '1:201',
                 expiration: 100
@@ -77,7 +77,7 @@ describe('modes', function () {
         it('denies when over limit', function () {
             clock.tick(50);
 
-            expect(bucket(rule, '5:100')).to.deep.equal({
+            expect(interval(rule, '5:100')).to.deep.equal({
                 limited: true,
                 next: '6:100',
                 expiration: 100
