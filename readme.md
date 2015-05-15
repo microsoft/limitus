@@ -85,10 +85,10 @@ Extends the limitus instance, mostly useful for settings the store. The `store` 
 ```js
 limiter.extend({
     set: function (key, value, expiration, callback) {
-        redis.setex(key, value, expiration / 1000, callback);
+        redis.setex(key, value, Math.ceil(expiration / 1000), callback);
     },
     get: function (key, callback) {
-        redis.get(key, callback)l
+        redis.get(key, callback);
     }
 });
 ```
