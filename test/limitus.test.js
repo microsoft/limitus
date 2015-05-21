@@ -99,10 +99,18 @@ describe('limitus', function () {
             sinon.spy(limitus, 'get');
         });
 
-        it('throws an error on undefined rule', function () {
-            expect(function () {
-                limitus.drop('foo', {});
-            }).to.throw;
+        it('calls back with an error on undefined rule', function (done) {
+            limitus.drop('foo', {}, function (err) {
+                expect(err.message).to.match(/foo not defined/);
+                done();
+            });
+        });
+
+        it('rejects with an error on undefined rule', function (done) {
+            limitus.drop('foo', {}).catch(function (err) {
+                expect(err.message).to.match(/foo not defined/);
+                done();
+            });
         });
 
         it('resolves when everything is OK', function (done) {
