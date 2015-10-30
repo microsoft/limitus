@@ -99,12 +99,14 @@ This is the error thrown when a rate limit is exceeded
 
 ## Performance
 
-Running on io.js in callback mode, Limitus runs an overhead of 1.5 μs (0.0015 milliseconds). Promise mode and older Node versions may be slightly slower, so use what you think is best:
+Running on io.js in callback mode, Limitus runs an overhead of around 1.5 μs (0.0015 milliseconds). Promise mode and older Node versions may be slightly slower, so use what you think is best:
 
 ```bash
 $ node bench.jsnode bench.js
-callbacks x 686,548 ops/sec ±2.47% (88 runs sampled)
-promises x 488,975 ops/sec ±2.69% (85 runs sampled)
+callbacks: continuous mode x 682,714 ops/sec ±2.78% (88 runs sampled)
+promises: continuous mode x 517,370 ops/sec ±2.31% (86 runs sampled)
+callbacks: interval mode x 639,222 ops/sec ±2.34% (88 runs sampled)
+promises: interval mode x 481,796 ops/sec ±2.88% (87 runs sampled)
 ```
 
 ## License
