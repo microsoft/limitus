@@ -90,7 +90,7 @@ describe('limitus', function () {
     });
 
     describe('drop', function () {
-        var mode, emptyKey = 'u5861539';
+        var mode, emptyKey = '5861539';
 
         beforeEach(function () {
             mode = sinon.stub();

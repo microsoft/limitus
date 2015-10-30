@@ -1,15 +1,21 @@
 var suite = new (require('benchmark')).Suite;
 var Limitus = require('./');
 var limiter = new Limitus();
-limiter.rule('login', { max: 5, interval: 1000 * 60 * 5 });
+
+
+limiter.extend({
+    set: function(key, value, expiration, cb) { cb(); },
+    get: function(key, callback) { callback(); }
+});
+limiter.rule('login', { max: 99999999, interval: 1000 * 60 * 5 });
 
 // add tests
 suite
-.add('cb', function() {
+.add('callbacks', function() {
     limiter.drop('login', { ip: '127.0.0.1' }, function () {});
 })
-.add('bb', function() {
-    limiter.drop('login', { ip: '127.0.0.1' }).catch(function(){});
+.add('promises', function() {
+    limiter.drop('login', { ip: '127.0.0.1' });
 })
 // add listeners
 .on('cycle', function(event) {
