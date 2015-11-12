@@ -19,27 +19,27 @@ describe('modes', function () {
             expect(continuous(rule, undefined)).to.deep.equal({
                 limited: false,
                 next: '1:0',
-                expiration: 100
+                expiration: 20
             });
         });
 
         it('adds from previous', function () {
-            clock.tick(50);
+            clock.tick(20);
 
             expect(continuous(rule, '2:0')).to.deep.equal({
                 limited: false,
-                next: '2.5:50',
-                expiration: 250
+                next: '2:20',
+                expiration: 40
             });
         });
 
         it('denies when over limit', function () {
             clock.tick(50);
 
-            expect(continuous(rule, '5:0')).to.deep.equal({
+            expect(continuous(rule, '50:0')).to.deep.equal({
                 limited: true,
-                next: '5.5:50',
-                expiration: 550
+                next: '48.5:50',
+                expiration: 970
             });
         });
     });
