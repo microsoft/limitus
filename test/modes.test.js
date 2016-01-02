@@ -52,7 +52,8 @@ describe('modes', function () {
             expect(interval(rule, undefined)).to.deep.equal({
                 limited: false,
                 next: '1:100',
-                expiration: 100
+                expiration: 100,
+                info: { bucket: 100, count: 1 }
             });
         });
 
@@ -60,7 +61,8 @@ describe('modes', function () {
             expect(interval(rule, '2:100')).to.deep.equal({
                 limited: false,
                 next: '3:100',
-                expiration: 100
+                expiration: 100,
+                info: { bucket: 100, count: 3 }
             });
         });
 
@@ -70,7 +72,8 @@ describe('modes', function () {
             expect(interval(rule, '2:100')).to.deep.equal({
                 limited: false,
                 next: '1:201',
-                expiration: 100
+                expiration: 100,
+                info: { bucket: 201, count: 1 }
             });
         });
 
@@ -80,7 +83,8 @@ describe('modes', function () {
             expect(interval(rule, '5:100')).to.deep.equal({
                 limited: true,
                 next: '6:100',
-                expiration: 100
+                expiration: 100,
+                info: { bucket: 100, count: 6 }
             });
         });
     });

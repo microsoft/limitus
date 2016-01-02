@@ -1,10 +1,10 @@
 {
   "name": "limitus",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Limitus makes rate limiting your anything a snap.",
   "main": "index.js",
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha test --recursive && node node_modules/jshint/bin/jshint lib",
+    "test": "node node_modules/mocha/bin/mocha test --recursive",
     "cover": "node node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha -- test --recursive",
     "travis": "node node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha --report lcovonly -- test --recursive"
   },
@@ -27,7 +27,6 @@
     "benchmark": "^1.0.0",
     "chai": "^2.1.2",
     "istanbul": "^0.3.11",
-    "jshint": "^2.6.3",
     "mocha": "^2.2.1",
     "sinon": "^1.14.1"
   },

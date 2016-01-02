@@ -114,24 +114,26 @@ describe('limitus', function () {
         });
 
         it('resolves when everything is OK', function (done) {
-            mode.returns({ limited: false, next: 'asdf', expiration: 300 });
+            mode.returns({ limited: false, next: 'asdf', expiration: 300, info: 'foobar' });
 
-            limitus.dropLogin({}).then(function () {
+            limitus.dropLogin({}).then(function (data) {
                 expect(limitus.get.calledWith(emptyKey)).to.be.true;
                 expect(mode.calledWith({ max: 5, interval: 100, mode: mode }, undefined)).to.be.true;
                 expect(limitus.set.calledWith(emptyKey, 'asdf', 300)).to.be.true;
+                expect(data).to.equal('foobar');
                 done();
             }).catch(done);
         });
 
         it('calls back when everything ok', function (done) {
-            mode.returns({ limited: false, next: 'asdf', expiration: 300 });
+            mode.returns({ limited: false, next: 'asdf', expiration: 300, info: 'foobar' });
 
-            limitus.dropLogin({}, function (err) {
+            limitus.dropLogin({}, function (err, data) {
                 expect(err).to.be.undefined;
                 expect(limitus.get.calledWith(emptyKey)).to.be.true;
                 expect(mode.calledWith({ max: 5, interval: 100, mode: mode }, undefined)).to.be.true;
                 expect(limitus.set.calledWith(emptyKey, 'asdf', 300)).to.be.true;
+                expect(data).to.equal('foobar');
                 done();
             });
         });
