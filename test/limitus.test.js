@@ -89,6 +89,49 @@ describe('limitus', function () {
         });
     });
 
+    describe('is limited', function () {
+        var mode, emptyKey = '5861539';
+
+        beforeEach(function () {
+            mode = sinon.stub();
+            limitus.rule('login', { max: 5, interval: 100, mode: mode });
+            sinon.spy(limitus, 'set');
+            sinon.spy(limitus, 'get');
+        });
+
+        it('says it\'s not limited when it isn\'t (callback)', function (done) {
+            mode.returns({ limited: false, next: 'asdf', expiration: 300, info: 'foobar' });
+
+            limitus.checkLimited('login', {}, function (err) {
+                expect(err).to.be.undefined;
+                done();
+            });
+        });
+
+        it('says it\'s limited when it is (callback)', function (done) {
+            mode.returns({ limited: true, next: 'asdf', expiration: 300 });
+
+            limitus.checkLimited('login', {}, function (err) {
+                expect(err).not.to.be.undefined;
+                done();
+            });
+        });
+
+        it('says it\'s not limited when it isn\'t (promise)', function () {
+            mode.returns({ limited: false, next: 'asdf', expiration: 300, info: 'foobar' });
+            return limitus.checkLimited('login', {});
+        });
+
+        it('says it\'s limited when it is (promise)', function () {
+            mode.returns({ limited: true, next: 'asdf', expiration: 300 });
+            return limitus.checkLimited('login', {}).then(function () {
+                throw new Error('expected to be limited');
+            }).catch(Limitus.Rejected, function () {
+                // ok!
+            });
+        });
+    });
+
     describe('drop', function () {
         var mode, emptyKey = '5861539';
 
