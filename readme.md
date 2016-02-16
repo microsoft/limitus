@@ -75,6 +75,10 @@ limiter.drop('login', { ip: req.ip }); // -> Promise
 limiter.dropLogin({ ip: req.ip }); // -> Promise
 ```
 
+#### limitus.checkLimited(bucket, identifier[, rule][, calback]) -> Promise
+
+This has the same function signature and behaviour as `.drop`, except this will not count that request towards the total. This can be used if you want, say, rate limit a method but only want to count successful results of that methods towards the limit. You can check the limit prior to calling the function, then call .drop() afterwards.
+
 #### limitus.extend(store)
 
 Extends the limitus instance, mostly useful for settings the store. The `store` should be an object that provides following methods:
