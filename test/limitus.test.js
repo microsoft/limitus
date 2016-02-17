@@ -133,7 +133,7 @@ describe('limitus', function () {
     });
 
     describe('drop', function () {
-        var mode, emptyKey = '5861539';
+        var mode, emptyKey = 'login:5861539';
 
         beforeEach(function () {
             mode = sinon.stub();
