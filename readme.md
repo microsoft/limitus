@@ -112,7 +112,3 @@ promises: continuous mode x 517,370 ops/sec ±2.31% (86 runs sampled)
 callbacks: interval mode x 639,222 ops/sec ±2.34% (88 runs sampled)
 promises: interval mode x 481,796 ops/sec ±2.88% (87 runs sampled)
 ```
-
-## License
-
-Limitus is copyright 2015 by Beam Interactive Inc. and distributed under the MIT license.
