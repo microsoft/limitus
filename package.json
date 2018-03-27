@@ -2,7 +2,8 @@
   "name": "limitus",
   "version": "2.2.2",
   "description": "Limitus makes rate limiting your anything a snap.",
-  "main": "index.js",
+  "main": "lib/limitus.js",
+  "typings": "typings.d.ts",
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha test --recursive",
     "cover": "node node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha -- test --recursive",
@@ -10,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MCProHosting/limitus.git"
+    "url": "https://github.com/Mixer/limitus.git"
   },
   "keywords": [
     "rate",
@@ -20,17 +21,14 @@
   "author": "Connor Peet <connor@peet.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MCProHosting/limitus/issues"
+    "url": "https://github.com/Mixer/limitus/issues"
   },
-  "homepage": "https://github.com/MCProHosting/limitus",
+  "homepage": "https://github.com/Mixer/limitus",
   "devDependencies": {
     "benchmark": "^2.1.0",
-    "chai": "^3.5.0",
+    "chai": "^4.1.2",
     "istanbul": "^0.4.2",
-    "mocha": "^2.4.5",
-    "sinon": "^1.17.3"
-  },
-  "dependencies": {
-    "bluebird": "^3.3.1"
+    "mocha": "^5.0.5",
+    "sinon": "^4.4.9"
   }
 }
