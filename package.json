@@ -1,6 +1,6 @@
 {
   "name": "limitus",
-  "version": "2.2.2",
+  "version": "3.0.0",
   "description": "Limitus makes rate limiting your anything a snap.",
   "main": "lib/limitus.js",
   "typings": "typings.d.ts",
