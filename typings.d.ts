@@ -25,7 +25,8 @@ declare namespace Limitus {
     }
 
     export class Rejected extends Error {
-        public readonly info: DropInfo;
+        public readonly info?: DropInfo;
+        public readonly bucketName: string;
     }
 
     export type Ident = object | string | number;
@@ -35,9 +36,9 @@ declare class Limitus {
     public rule(name: string, rule: Limitus.Rule): this;
 
 
-    public drop(name: string, ident: Limitus.Ident, rule?: Limitus.Rule): Promise<Limitus.ModeResult>;
-    public drop(name: string, ident: Limitus.Ident, rule?: Limitus.Rule, callback?: (err: Error | null, res?: Limitus.ModeResult) => void): void;
-    public checkLimited(name: string, ident: Limitus.Ident, rule?: Limitus.Rule): Promise<Limitus.ModeResult>;
-    public checkLimited(name: string, ident: Limitus.Ident, rule?: Limitus.Rule, callback?: (err: Error | null, res?: Limitus.ModeResult) => void): void;
+    public drop(name: string, ident: Limitus.Ident, rule?: Limitus.Rule): Promise<Limitus.DropInfo>;
+    public drop(name: string, ident: Limitus.Ident, rule?: Limitus.Rule, callback?: (err: Error | null, res?: Limitus.DropInfo) => void): void;
+    public checkLimited(name: string, ident: Limitus.Ident, rule?: Limitus.Rule): Promise<Limitus.DropInfo>;
+    public checkLimited(name: string, ident: Limitus.Ident, rule?: Limitus.Rule, callback?: (err: Error | null, res?: Limitus.DropInfo) => void): void;
 }
 export = Limitus;
